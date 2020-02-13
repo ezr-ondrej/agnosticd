@@ -3,7 +3,7 @@
 ################################################################################
 
 
-cloud_provider: osp                               
+cloud_provider: osp
 install_student_user: false
 
 
@@ -19,12 +19,17 @@ admin_user: opentlc-mgr
 
 bastion_instance_type: 2c2g30d
 satellite_instance_type: 8c32g100d
+capsule_instance_type: 2c2g30d
+host_instance_type: 2c2g30d
 
-_image: rhel-server-7.7-update-2 
+_image: rhel-server-7.7-update-2
 bastion_instance_image: "{{ _image }}"
 satellite_instance_image: "{{ _image }}"
+capsule_image: "{{ _image }}"
+host_image: "rhel-8.1"
 
 satellite_instance_count: 1
+capsule_instance_count: 0
 
 security_groups:
   - name: SatelliteSG
@@ -50,7 +55,7 @@ security_groups:
         protocol: tcp
         from_group: DefaultSG
         rule_type: Ingress
- 
+
 # Environment Instances
 instances:
   - name: "bastion"
@@ -84,8 +89,7 @@ instances:
       ec2: "{{satellite_instance_type}}"
       osp: "{{satellite_instance_type}}"
       azure: Standard_A2_V2
-    image_id: "{{ satellite_instance_image }}"
-    security_groups: 
+    security_groups:
       - SatelliteSG
       - DefaultSG
     tags:
@@ -96,5 +100,22 @@ instances:
       - key: "instance_filter"
         value: "{{ env_type }}-{{ email }}"
 
-
-
+  - name: "capsule"
+    count: "{{ capsule_instance_count }}"
+    public_dns: false
+    floating_ip: true
+    image_id: "{{ capsule_image }}"
+    flavor:
+      ec2: "{{ capsule_instance_type }}"
+      osp: "{{ capsule_instance_type }}"
+      azure: Standard_A2_V2
+    security_groups:
+      - SatelliteSG
+      - DefaultSG
+    tags:
+      - key: "AnsibleGroup"
+        value: "capsules"
+      - key: "ostype"
+        value: "linux"
+      - key: "instance_filter"
+        value: "{{ env_type }}-{{ email }}"

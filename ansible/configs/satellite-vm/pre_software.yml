@@ -12,15 +12,40 @@
 
 - name: Configure all hosts with Repositories
   hosts:
-    - all:!windows
+    - all:!windows:!hosts
   become: true
   gather_facts: False
   tags:
     - step004
     - common_tasks
   roles:
-    - { role: "set-repositories", when: 'repo_method is defined' }
+    - role: "set-repositories"
+      vars:
+        rhel_repos: "{{ satellite_rhel_repos }}"
+        repo_method: "{{ satellite_repo_method }}"
+        use_own_repos: "{{ satellite_use_own_repos }}"
+      when: 'satellite_repo_method is defined'
     - { role: "set_env_authorized_key", when: 'set_env_authorized_key' }
+
+- name: Configure all hosts with Repositories
+  hosts:
+    - hosts
+  become: true
+  gather_facts: False
+  tags:
+    - step004
+    - common_tasks
+  roles:
+    - role: "set-repositories"
+      vars:
+        rhel_repos: "{{ hosts_rhel_repos }}"
+        repo_method: "satellite"
+        satellite_org: Red_Hat_GPTE_Labs
+        satellite_activationkey: rhel8-summit
+        satellite_url: labsat.opentlc.com
+        use_content_view: false
+    - role: "set_env_authorized_key"
+      when: 'set_env_authorized_key'
 
 
 - name: Configuring Bastion Hosts
@@ -34,6 +59,14 @@
   tags:
     - step004
     - bastion_tasks
+
+- name: Install pip apypie for foreman-ansible-modules
+  hosts: satellite
+  become: true
+  tasks:
+    - pip:
+        name: apypie
+
 - name: PreSoftware flight-check
   hosts: localhost
   connection: local
