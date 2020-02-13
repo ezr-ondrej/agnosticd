@@ -34,7 +34,7 @@
 
 - name: Configure all hosts with Repositories
   hosts:
-    - all:!windows:!hosts
+    - all:!windows:!hosts:!satellites
   become: true
   gather_facts: False
   tags:
@@ -43,9 +43,29 @@
   roles:
     - role: "set-repositories"
       vars:
-        rhel_repos: "{{ satellite_rhel_repos }}"
+        rhel_repos: "{{ rhel7_repos }}"
         repo_method: "{{ satellite_repo_method }}"
         use_own_repos: "{{ satellite_use_own_repos }}"
+      when: 'satellite_repo_method is defined'
+    - { role: "set_env_authorized_key", when: 'set_env_authorized_key' }
+
+- name: Configure satellites with Repositories
+  hosts:
+    - satellites
+  become: true
+  gather_facts: False
+  tags:
+    - step004
+    - common_tasks
+  roles:
+    - role: "set-repositories"
+      vars:
+        rhel_repos: "{{ rhel7_repos + satellite_repos }}"
+        repo_method: "satellite"
+        satellite_org: Summit-2020
+        satellite_activationkey: Summit-2020
+        satellite_url: labsat.opentlc.com
+        use_content_view: false
       when: 'satellite_repo_method is defined'
     - { role: "set_env_authorized_key", when: 'set_env_authorized_key' }
 
@@ -60,7 +80,7 @@
   roles:
     - role: "set-repositories"
       vars:
-        rhel_repos: "{{ hosts_rhel_repos }}"
+        rhel_repos: "{{ rhel8_repos }}"
         repo_method: "satellite"
         satellite_org: Red_Hat_GPTE_Labs
         satellite_activationkey: rhel8-summit
@@ -81,6 +101,13 @@
   tags:
     - step004
     - bastion_tasks
+
+- name: Install pip apypie for foreman-ansible-modules
+  hosts: satellite
+  become: true
+  tasks:
+    - pip:
+        name: apypie
 
 - name: PreSoftware flight-check
   hosts: localhost
