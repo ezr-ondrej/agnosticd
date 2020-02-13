@@ -1,9 +1,12 @@
 ---
+- import_tasks: remove_epel_repos.yml
+  tags:
+    - install_satellite
+
 - import_tasks: firewalld.yml
   tags:
     - install_satellite
     - install_firewalld
-
 
 - name: Update system
   package:
@@ -20,8 +23,8 @@
     - install_satellite
 
 ## Import for version satellite 6.6 ##
-- import_tasks: version_6.6.yml
-  when: satellite_version == 6.6
+- import_tasks: version_6.6+.yml
+  when: satellite_version >= 6.6
   tags:
     - install_satellite
 

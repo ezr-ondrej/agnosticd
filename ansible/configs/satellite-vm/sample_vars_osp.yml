@@ -14,7 +14,12 @@ satellite_admin: admin
 satellite_admin_password: admin
 manifest_file: "<manifestFile>.zip"
 
-satellite_version: 6.4
+satellite_version: 6.7
+satellite_repos:
+  - Summit-2020_Summit-Contents_Satellite_6_7_RHEL7
+  - Summit-2020_Summit-Contents_Satellite_Tools_6_7_RHEL7_x86_64
+  - Summit-2020_Summit-Contents_Satellite_Maintenance_Next_RHEL7
+
 org: gpte
 org_label: gpte
 org_description: "Global Partner Training and Enablement"
@@ -22,7 +27,6 @@ org_description: "Global Partner Training and Enablement"
 satellite_hosts:
   - name: skylab
   - name: aqua
-  - name: placeholder
 
 capsule_instance_count: 1
 
@@ -53,6 +57,11 @@ satellite_content:
     repos:
       - name: 'Red Hat Enterprise Linux 7 Server (RPMs)'
         product: 'Red Hat Enterprise Linux Server'
+        basearch: 'x86_64'
+        releasever:  '7Server'
+
+      - name: 'Red Hat Software Collections RPMs for Red Hat Enterprise Linux 7 Server'
+        product: 'Red Hat Software Collections for RHEL Server'
         basearch: 'x86_64'
         releasever:  '7Server'
 

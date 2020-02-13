@@ -1,7 +1,7 @@
 ---
 - name: Install Satellite Package
   package:
-    name: satellite-6.6*.el7*
+    name: satellite-{{ satellite_version }}*.el7*
     state: present
   tags:
     - install_satellite
@@ -11,7 +11,7 @@
     satellite-installer --scenario satellite
     --foreman-initial-admin-username {{ satellite_admin }}
     --foreman-initial-admin-password {{ satellite_admin_password }}
-    --certs-cname {{inventory_hostname}}
+    --certs-cname {{ inventory_hostname }}
   async: 3600
   poll: 72
   tags:
