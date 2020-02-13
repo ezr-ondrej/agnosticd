@@ -9,6 +9,25 @@
 {% endif %}
 {% endfor %}
 
+{# # These are the capsule hosts #}
+
+[capsules]
+{% for host in groups['capsules'] %}
+{%      if cloud_provider == 'ec2' %}
+{{host}}
+{%      elif cloud_provider == 'osp' %}
+{{host}} ansible_host={{host}}.example.com
+{% endif %}
+{% endfor %}
+
+[hosts]
+{% for host in groups['hosts'] %}
+{%      if cloud_provider == 'ec2' %}
+{{host}}
+{%      elif cloud_provider == 'osp' %}
+{{host}} ansible_host={{host}}.example.com
+{% endif %}
+{% endfor %}
 
 [all:vars]
 {# ###########################################################################
@@ -20,3 +39,5 @@ ansible_user={{remote_user}}
 
 [all:children]
 satellites
+capsules
+hosts
