@@ -113,6 +113,7 @@ instances:
     dns_loadbalancer: false
     floating_ip: true
     image_id: "{{ bastion_instance_image }}"
+    rootfs_size: 100
     flavor:
       ec2: "{{bastion_instance_type}}"
       osp: "{{bastion_instance_type}}"

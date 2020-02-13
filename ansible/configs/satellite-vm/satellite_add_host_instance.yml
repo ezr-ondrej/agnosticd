@@ -8,6 +8,7 @@
       name: "{{ host.name }}"
       count: 1
       public_dns: false
+      floating_ip: true
       image_id: "{{ host.image_id|default(None) or host_image }}"
       flavor:
         ec2: "{{ host_instance_type }}"

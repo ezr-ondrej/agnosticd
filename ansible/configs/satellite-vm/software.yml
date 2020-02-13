@@ -23,7 +23,6 @@
     # - { role: "satellite-manage-content-view",          when: configure_satellite }
     # - { role: "satellite-manage-activationkey",         when: configure_satellite }
 
-
 - name: Software flight-check
   hosts: localhost
   connection: local
