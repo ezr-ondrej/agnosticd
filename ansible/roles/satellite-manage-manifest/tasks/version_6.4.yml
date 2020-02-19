@@ -1,4 +1,8 @@
 ---
+- name: Copy manifest
+  copy:
+    src: "{{ manifest_file }}"
+    dest: /tmp
 
 - name: "Upload the manifest"
   theforeman.foreman.katello_manifest:
@@ -6,7 +10,7 @@
     password: "{{ satellite_admin_password }}"
     server_url: "https://{{ publicname }}"
     organization: "{{ org }}"
-    manifest_path: "{{ manifest_file }}"
+    manifest_path: "/tmp/{{ manifest_file | basename }}"
     state: present
     validate_certs: no
   tags:
