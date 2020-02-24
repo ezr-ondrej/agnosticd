@@ -32,8 +32,49 @@ satellite_instance_count: 1
 capsule_instance_count: 0
 
 security_groups:
+  - name: HostSG
+    rules:
+      - name: CapsHostSSHPort
+        description: "Allow ssh to hosts from Satellite"
+        from_port: 22
+        to_port: 22
+        protocol: tcp
+        rule_type: Ingress
+        from_group: CapsuleSG
+  - name: CapsuleSG
+    rules:
+      # from satellite
+      - name: PulpHTTPSPort
+        description: "Pulp HTTPS from satellite"
+        from_port: 443
+        to_port: 443
+        protocol: tcp
+        from_group: SatelliteSG
+        rule_type: Ingress
+      - name: ProxyHTTPSPort
+        description: "proxy HTTPS from satellite"
+        from_port: 9090
+        to_port: 9090
+        protocol: tcp
+        from_group: SatelliteSG
+        rule_type: Ingress
+      # from Hosts
+      - name: CapsuleProvisionPort
+        description: "Download templates"
+        from_port: 8000
+        to_port: 8000
+        protocol: tcp
+        from_group: HostSG
+        rule_type: Ingress
   - name: SatelliteSG
     rules:
+      - name: SatHTTPPorts
+        description: "HTTP Public"
+        from_port: 80
+        to_port: 80
+        protocol: tcp
+        cidr: "0.0.0.0/0"
+        rule_type: Ingress
       - name: SatHTTPSPorts
         description: "HTTPS Public"
         from_port: 443
@@ -46,14 +87,22 @@ security_groups:
         from_port: 1
         to_port: 65535
         protocol: udp
-        from_group: DefaultSG
+        from_group: BastionSG
         rule_type: Ingress
       - name: BastionTCPPorts
         description: "Only from bastion"
         from_port: 1
         to_port: 65535
         protocol: tcp
-        from_group: DefaultSG
+        from_group: BastionSG
+        rule_type: Ingress
+      # Capsule to satellite
+      - name: CapsQpidToSat
+        description: "Qpid com to satellite"
+        from_port: 5646
+        to_port: 5646
+        protocol: tcp
+        from_group: CapsuleSG
         rule_type: Ingress
 
 # Environment Instances
@@ -91,6 +140,7 @@ instances:
       azure: Standard_A2_V2
     security_groups:
       - SatelliteSG
+      - CapsuleSG
       - DefaultSG
     tags:
       - key: "AnsibleGroup"
@@ -110,7 +160,7 @@ instances:
       osp: "{{ capsule_instance_type }}"
       azure: Standard_A2_V2
     security_groups:
-      - SatelliteSG
+      - CapsuleSG
       - DefaultSG
     tags:
       - key: "AnsibleGroup"
@@ -119,3 +169,6 @@ instances:
         value: "linux"
       - key: "instance_filter"
         value: "{{ env_type }}-{{ email }}"
+
+# Note: there are no hosts instances
+#       those are added dynamically
