@@ -13,6 +13,10 @@ satellite_version: 6.4
 org: gpte
 org_label: gpte
 org_description: "Global Partner Training and Enablement"
+
+satellite_hosts:
+  - name: skylab
+
 lifecycle_environment_path:
     - name: "Dev"
       label: "dev"

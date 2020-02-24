@@ -5,21 +5,19 @@
 #     msg: "{% if item.1.releasever is defined %}{{ item.1.releasever }}{% endif %}"
 #   loop: "{{ satellite_content | subelements('repos') }}"
 
-- name: Setting up satellite repository 
-  script: >- 
-    subscription_script_version_6.4.sh 
-    "{{ org }}" 
-    "{{ item.1.name | regex_replace('[()]')  + ' ' + item.1.basearch + ( ' ' if item.1.releasever|d(None)  else '')  +  item.1.releasever|d('') }}"
-    "{{ item.1.name }}"
-    "{{ item.1.product }}" 
-    "{{ item.1.basearch }}" 
-    "{% if item.1.releasever is defined %}{{ item.1.releasever }}{% endif %}"
-  register: output
-  changed_when: '"already exist" not in output.stdout'
+- name: Setting up satellite repository
+  theforeman.foreman.katello_repository_set:
+    username: "{{ satellite_admin }}"
+    password: "{{ satellite_admin_password }}"
+    server_url: "https://{{ publicname }}"
+    validate_certs: no
+    organization: "{{ org }}"
+    name: "{{ item.1.name }}"
+    product: "{{ item.1.product }}"
+    repositories:
+    - releasever: "{{ item.1.releasever | default(omit) }}"
+      basearch: "{{ item.1.basearch | default(omit) }}"
   loop: "{{ satellite_content | subelements('repos') }}"
   tags:
     - configure_satellite
     - configure_satellite_subscription
-
-
-
