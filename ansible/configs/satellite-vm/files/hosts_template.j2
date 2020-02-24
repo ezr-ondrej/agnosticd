@@ -10,7 +10,7 @@
 {% endfor %}
 
 {# # These are the capsule hosts #}
-
+{% if 'capsules' in groups %}
 [capsules]
 {% for host in groups['capsules'] %}
 {%      if cloud_provider == 'ec2' %}
@@ -19,6 +19,7 @@
 {{host}} ansible_host={{host}}.example.com
 {% endif %}
 {% endfor %}
+{% endif %}
 
 [hosts]
 {% for host in groups['hosts'] %}

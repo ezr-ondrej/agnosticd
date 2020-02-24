@@ -10,20 +10,25 @@
         name: infra-local-create-ssh_key
       when: set_env_authorized_key | bool
 
-- name: Enable epel just for pip install
+- name: Enable epel and install pip
   hosts: satellites
   become: true
   tasks:
+    - name: Gather the rpm package facts
+      package_facts:
+        manager: auto
     - yum:
         name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
         state: present
+      when: "'python-pip' not in ansible_facts.packages"
+    - package:
+        name: python-pip
+      when: "'python-pip' not in ansible_facts.packages"
 
 - name: Install apypie package for foreman-ansible-modules
   hosts: satellites
   become: true
   tasks:
-    - package:
-        name: python-pip
     - pip:
         name: apypie
 
