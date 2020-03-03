@@ -10,7 +10,7 @@
         name: infra-local-create-ssh_key
       when: set_env_authorized_key | bool
 
-- name: Enable epel and install pip
+- name: Enable epel and install pip and libvirt gem
   hosts: satellites
   become: true
   tasks:
@@ -20,10 +20,11 @@
     - yum:
         name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
         state: present
-      when: "'python-pip' not in ansible_facts.packages"
     - package:
         name: python-pip
       when: "'python-pip' not in ansible_facts.packages"
+    - package:
+        name: rubygem-ruby-libvirt
 
 - name: Install apypie package for foreman-ansible-modules
   hosts: satellites
