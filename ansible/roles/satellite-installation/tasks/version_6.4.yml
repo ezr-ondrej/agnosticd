@@ -1,13 +1,4 @@
 ---
-
-- name: Update system
-  package:
-    name: '*'
-    state: latest
-  tags:
-    - install_satellite
-    - update_satellite_host
-
 - name: Install Satellite Package
   package:
     name: satellite-6.4*.el7*
