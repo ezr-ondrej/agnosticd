@@ -35,10 +35,11 @@
         - satellite-manage-manifest
         - satellite-manage-subscription
         - satellite-manage-sync
-        # - satellite-manage-lifecycle
-        # - satellite-manage-content-view
+        - satellite-manage-lifecycle
+        - satellite-manage-content-view
         # - satellite-manage-activationkey
         # - satellite-manage-capsule-certificate
+
 
 - name: Software flight-check
   hosts: localhost

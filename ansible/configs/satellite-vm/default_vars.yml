@@ -71,5 +71,6 @@ common_packages:
 cf_template_description: "{{ env_type }}-{{ guid }} Ansible Agnostic Deployer "
 
 satellite_hosts: []
+satellite_content: []
 
 ...

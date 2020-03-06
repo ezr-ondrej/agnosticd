@@ -15,4 +15,3 @@
     - name: Pre-Infra done
       debug:
         msg: "Pre-Infra work is done"
-

@@ -47,10 +47,32 @@ Config Variables
 |org_label: "String" |Required | Organization label in string without space
 |org_description: "String" |Required | Organization description
 |lifecycle_environment_path: [list] |Required | Contains nested list of environment path
-|satellite_content: [list] |Required | Main List variable
+|satellite_content: [list *] |Required | Main List variable
 |subscription_name: "String" |Required | Subscription name mainly required for manifest role
 | manifest_file: "/path/to/manifest.zip" |Required | Path of download satellite manifest
+| cdn_repository_url: 'my.example.com/cdn' |Optional | Defaults to cdn.redhat.com
 |===
+
+* *_satellite_content_* variable inner structure
+
+[cols="5a,1,3a"]
+|===
+|*Variable* | *State* |*Description*
+|name: String   |Required | Name of the content
+|subscriptions: [list of string] |Required | What subscriptions to use for this content
+|life_cycle: "String" |Required |What life cycle env to register to
+|content_view: "String" |Required |Content View name
+|org_label: "String" |Required | Organization label in string without space
+|repos: [list of repos]
+!===
+!name: "String" ! Required ! Name
+!product: "String" ! Required ! Product to add repo to
+!basearch: "String" ! Optional ! Architecture to add repo for
+!releasever: "String" ! Optional ! Release version
+!===
+|Required | Repositories to enable and add to the content view
+|===
+
 
 [NOTE]
 For more about variables read README.adoc of the roles.

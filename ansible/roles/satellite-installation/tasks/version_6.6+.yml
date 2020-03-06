@@ -1,8 +1,10 @@
 ---
 - name: Install Satellite Package
   package:
-    name: satellite-{{ satellite_version }}*.el7*
+    name: satellite
     state: present
+  async: 1800
+  poll: 36
   tags:
     - install_satellite
 
