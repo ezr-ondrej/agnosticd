@@ -50,7 +50,26 @@ Config Variables
 |satellite_content: [list] |Required | Main List variable
 |subscription_name: "String" |Required | Subscription name mainly required for manifest role
 | manifest_file: "/path/to/manifest.zip" |Required | Path of download satellite manifest
+| cdn_repository_url: 'my.example.com/cdn' |Optional | Defaults to cdn.redhat.com
 |===
+
+* satellite_content* structure
+
+|===
+|*Variable* | *State* |*Description*
+|name: String   |Required | Name of the content
+|subscriptions: [list of string] |Required | What subscriptions to use
+|life_cycle: "String" |Required |What life cycle env to register to
+|content_view: "String" |Required |Content View name
+|org_label: "String" |Required | Organization label in string without space
+|repos: [list of repos] |Required | Organization label in string without space
+!======
+!name:
+!version:
+!releasever:
+!======
+|===
+
 
 [NOTE]
 For more about variables read README.adoc of the roles.

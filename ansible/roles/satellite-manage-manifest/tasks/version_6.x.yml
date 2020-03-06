@@ -12,6 +12,7 @@
     organization: "{{ org }}"
     validate_certs: no
     manifest_path: "/tmp/{{ manifest_file | basename }}"
+    repository_url: "{{ cdn_repository_url | d(omit) }}"
     state: present
   tags:
     - configure_satellite

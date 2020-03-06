@@ -13,6 +13,7 @@ configure_satellite: True
 satellite_admin: admin
 satellite_admin_password: admin
 manifest_file: "<manifestFile>.zip"
+cdn_repository_url: http://d3s3zqyaz8cp2d.cloudfront.net/cdn
 
 satellite_version: 6.7
 satellite_repos:
@@ -89,6 +90,9 @@ satellite_content:
       - "Employee SKU"
     repos:
       - name: 'Red Hat Enterprise Linux 8 for x86_64 - BaseOS (RPMs)'
+        product: 'Red Hat Enterprise Linux for x86_64'
+        releasever:  '8.1'
+      - name: 'Red Hat Enterprise Linux 8 for x86_64 - AppStream (RPMs)'
         product: 'Red Hat Enterprise Linux for x86_64'
         releasever:  '8.1'
 
