@@ -21,7 +21,17 @@
     - { role: "satellite-manage-sync",                  when: configure_satellite }
     - { role: "satellite-manage-lifecycle",             when: configure_satellite }
     - { role: "satellite-manage-content-view",          when: configure_satellite }
-    # - { role: "satellite-manage-activationkey",         when: configure_satellite }
+    - { role: "satellite-manage-activationkey",         when: configure_satellite }
+
+- name: Configure satellite hosts
+  hosts: satellite_hosts
+  become: True
+  gather_facts: True
+  roles:
+    - role: "satellite-register-hosts"
+      vars:
+        satellite_hostname: "{{ hostvars['satellite']['publicname'] }}"
+      when: configure_satellite
 
 - name: Software flight-check
   hosts: localhost
