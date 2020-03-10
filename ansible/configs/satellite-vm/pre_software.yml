@@ -34,7 +34,7 @@
 
 - name: Configure all hosts with Repositories
   hosts:
-    - all:!windows:!hosts:!satellites
+    - all:!windows:!satellite_hosts:!satellites
   become: true
   gather_facts: False
   tags:
@@ -54,9 +54,6 @@
     - satellites
   become: true
   gather_facts: False
-  tags:
-    - step004
-    - common_tasks
   roles:
     - role: "set-repositories"
       vars:
@@ -68,26 +65,9 @@
         use_content_view: false
       when: 'satellite_repo_method is defined'
     - { role: "set_env_authorized_key", when: 'set_env_authorized_key' }
-
-- name: Configure satellite hosts with Repositories
-  hosts:
-    - hosts
-  become: true
-  gather_facts: False
   tags:
     - step004
-    - common_tasks
-  roles:
-    - role: "set-repositories"
-      vars:
-        rhel_repos: "{{ rhel8_repos }}"
-        repo_method: "satellite"
-        satellite_org: Red_Hat_GPTE_Labs
-        satellite_activationkey: rhel8-summit
-        satellite_url: labsat.opentlc.com
-        use_content_view: false
-    - role: "set_env_authorized_key"
-      when: 'set_env_authorized_key'
+    - satellite_tasks
 
 
 - name: Configuring Bastion Hosts
@@ -97,7 +77,6 @@
     - { role: "common",  when: 'install_common' }
     - { role: "bastion", when: 'install_bastion' }
     - { role: "bastion-opentlc-ipa", when: 'install_ipa_client' }
-
   tags:
     - step004
     - bastion_tasks

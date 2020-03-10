@@ -21,12 +21,12 @@
 {% endfor %}
 {% endif %}
 
-[hosts]
-{% for host in groups['hosts'] %}
+[satellite_hosts]
+{% for satellite_host in groups['satellite_hosts'] %}
 {%      if cloud_provider == 'ec2' %}
-{{host}}
+{{satellite_host}}
 {%      elif cloud_provider == 'osp' %}
-{{host}} ansible_host={{host}}.example.com
+{{satellite_host}} ansible_host={{satellite_host}}.example.com
 {% endif %}
 {% endfor %}
 
@@ -41,4 +41,4 @@ ansible_user={{remote_user}}
 [all:children]
 satellites
 capsules
-hosts
+satellite_hosts

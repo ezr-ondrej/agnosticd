@@ -19,7 +19,7 @@
         - DefaultSG
       tags:
         - key: "AnsibleGroup"
-          value: "hosts"
+          value: "satellite_hosts"
         - key: "ostype"
           value: "linux"
         - key: "instance_filter"

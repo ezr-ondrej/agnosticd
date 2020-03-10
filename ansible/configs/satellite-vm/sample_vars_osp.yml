@@ -25,6 +25,7 @@ org: gpte
 org_label: gpte
 org_description: "Global Partner Training and Enablement"
 
+satellite_hosts_register_key: 'three_tier_app_key'
 satellite_hosts:
   - name: skylab
   - name: aqua
@@ -51,7 +52,8 @@ satellite_content:
   - name:             "Capsule Server"
     activation_key:   "capsule_key"
     subscriptions:
-      - "Employee SKU"
+      - name: "Employee SKU"
+      - pool_id: "some subscription pool id"
     life_cycle:       "Library"
     content_view:     "Capsule Content"
     content_view_update: False
@@ -87,7 +89,8 @@ satellite_content:
     content_view:     "Three Tier App Content"
     life_cycle:       "Library"
     subscriptions:
-      - "Employee SKU"
+      - name: "Employee SKU"
+      - pool_id: "some subscription pool id"
     repos:
       - name: 'Red Hat Enterprise Linux 8 for x86_64 - BaseOS (RPMs)'
         product: 'Red Hat Enterprise Linux for x86_64'

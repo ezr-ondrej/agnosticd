@@ -8,30 +8,17 @@
     - configure_satellite
     - configure_satellite_content_view
 
-# ## Publish content view ###
-# - name: Publish content-view
-#   command: >-
-#       hammer content-view publish
-#       --organization "{{org}}"
-#       --name "{{ item.content_view }}"
-#       --async
-#   when: item.content_view  not in content_view_list.stdout_lines
-#   loop: "{{ satellite_content }}"
-#   tags:
-#     - configure_satellite
-#     - configure_satellite_content_view
-
-# ### Republish content view
-# - name: Updating Publish content-view (new version)
-#   command: >-
-#       hammer content-view publish
-#       --organization "{{org}}"
-#       --name "{{ item.content_view }}"
-#       --async
-#   when:
-#     - item.content_view in content_view_list.stdout_lines
-#     - item.0.content_view_update | d(false) == True
-#   loop: "{{ satellite_content }}"
-#   tags:
-#     - configure_satellite
-#     - configure_satellite_content_view
+- name: "Ensure content view version 1.0 is in all environments"
+  theforeman.foreman.katello_content_view_version:
+    username: "{{ satellite_admin }}"
+    password: "{{ satellite_admin_password }}"
+    server_url: "https://{{ publicname }}"
+    validate_certs: no
+    content_view: "{{ item.content_view }}"
+    organization: "{{ org }}"
+    version: 1.0
+    lifecycle_environments: "{{ lifecycle_environment_path | map(attribute='name') | list }}"
+  with_items: "{{ satellite_content }}"
+  tags:
+    - configure_satellite
+    - configure_satellite_content_view
