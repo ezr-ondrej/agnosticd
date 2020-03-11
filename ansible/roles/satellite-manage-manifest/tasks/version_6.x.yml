@@ -1,8 +1,25 @@
 ---
+- name: Check if manifest file is uploaded
+  stat:
+    path: "/tmp/{{ manifest_file | basename }}"
+  register: manifest_file_existance_result
+
 - name: Copy manifest
   copy:
     src: "{{ manifest_file }}"
     dest: /tmp
+  when:
+    - not manifest_file_existance_result.stat.exists
+    - "not manifest_file.startswith('http')"
+    - "not manifest_file.startswith('ftp')"
+
+- name:
+  get_url:
+    url: "{{ manifest_file }}"
+    dest: /tmp
+  when:
+    - not manifest_file_existance_result.stat.exists
+    - "manifest_file.startswith('http') or manifest_file.startswith('ftp')"
 
 - name: "Upload the manifest"
   theforeman.foreman.katello_manifest:
