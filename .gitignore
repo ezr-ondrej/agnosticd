@@ -22,6 +22,7 @@ virtualenv/
 *.rc
 .tox
 ansible/configs/*/roles
+ansible/configs/*/collections
 .pre-commit-config.yaml
 .DS_Store
 my_*_vars.yml

@@ -67,6 +67,7 @@ satellite_content:
         product: 'Red Hat Software Collections for RHEL Server'
         basearch: 'x86_64'
         releasever:  '7Server'
+        sync: no
 
       - name: 'Red Hat Satellite Capsule 6.4 (for RHEL 7 Server) (RPMs)'
         product: 'Red Hat Satellite Capsule'
@@ -75,6 +76,7 @@ satellite_content:
       - name: 'Red Hat Satellite Maintenance 6 (for RHEL 7 Server) (RPMs)'
         product: 'Red Hat Enterprise Linux Server'
         basearch: 'x86_64'
+        sync: no
 
       - name: 'Red Hat Ansible Engine 2.6 RPMs for Red Hat Enterprise Linux 7 Server'
         product: 'Red Hat Ansible Engine'

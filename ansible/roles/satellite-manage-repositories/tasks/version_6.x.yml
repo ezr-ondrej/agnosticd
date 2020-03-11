@@ -1,4 +1,20 @@
 ---
+- name: Setting up satellite repository
+  theforeman.foreman.katello_repository_set:
+    username: "{{ satellite_admin }}"
+    password: "{{ satellite_admin_password }}"
+    server_url: "https://{{ publicname }}"
+    validate_certs: no
+    organization: "{{ org }}"
+    name: "{{ item.1.name }}"
+    product: "{{ item.1.product }}"
+    repositories:
+    - releasever: "{{ item.1.releasever | default(omit) }}"
+      basearch: "{{ item.1.basearch | default(omit) }}"
+  loop: "{{ satellite_content | subelements('repos') }}"
+  tags:
+    - configure_satellite
+    - configure_satellite_reposet
 
 ## Sync repositories
 - name: Sync repository
@@ -14,6 +30,7 @@
   async: 999999
   poll: 0
   register: repo_sync_sleeper
+  when: item.1.sync | default(True) | bool
   tags:
     - configure_satellite
     - configure_satellite_sync

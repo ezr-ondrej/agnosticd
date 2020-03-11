@@ -3,7 +3,7 @@
 :tag1: configure_satellite
 :tag2: configure_satellite_manifest
 :main_file: tasks/main.yml
-:version_file: tasks/version_6.4.yml
+:version_file: tasks/version_6.x.yml
 
 Role: {role}
 ============
@@ -17,22 +17,22 @@ Following are the requirements:
 
 . Satellite must be install and setup.
 . Hammer cli config must be configured/updated with privileged user and password to run the satellite cli.
- 
+
 
 Role Variables
 --------------
 
-* Following are the variable which needs to be defined 
+* Following are the variable which needs to be defined
 
 |===
 |satellite_version: "Digit" |Required |satellite version
 |org: "String" |Required |Organization name
 |org_label: "String" |Not-equired | Organization label in string without space
 |org_description: "String" |Not-required | Organization description
-|subscription_name: "String" |Required |Subscription name for manifest 
+|subscription_name: "String" |Required |Subscription name for manifest
 |manifest_file: "String" |Required |Holds local path of manifest file
 |===
-    
+
 * Exammple variables
 
 [source=text]

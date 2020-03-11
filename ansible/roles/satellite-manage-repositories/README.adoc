@@ -1,15 +1,15 @@
 :role: satellite-manage-subscription
 :author: GPTE Team
 :tag1: configure_satellite
-:tag2: configure_satellite_subscription
+:tag2: configure_satellite_reposet
+:tag3: configure_satellite_sync
 :main_file: tasks/main.yml
-:version_file: tasks/version_6.4.yml
-:script_file: files/subscription_script_version_6.4.sh
+:version_file: tasks/version_6.x.yml
 
 Role: {role}
 ============
 
-This role enables subscribed repository.
+This role enables subscribed repository and synchronizes them.
 
 Requirements
 ------------
@@ -17,13 +17,12 @@ Requirements
 Following are the requirements:
 
 . Satellite must be install and setup.
-. Hammer cli config must be configured/updated with privileged user and password to run the satellite cli.
-. Subscription should be exist in satellite server.
- 
+. Subscription through manifest should exist in satellite server.
+
 Role Variables
 --------------
 
-* Following are the variable which needs to be defined 
+* Following are the variable which needs to be defined
 
 |===
 |satellite_version: "Digit" |Required |satellite version
@@ -31,37 +30,39 @@ Role Variables
 |org_label: "String" |Notrequired | Organization label in string without space
 |org_description: "String" |Not-required | Organization description
 |satellite_content: {Dictionary} |Required | Main dictionary variable
-|repos: [list] | Required | List of repository name 
+|repos: [list] | Required | List of repository name
 |product: "String" |Required | Product name of repository
 |name: "String" |Required | Repository Name
-|basearch: "String" |Required | Repository Base Arch
+|basearch: "String" |Whereever Applicable | Repository Base Arch
 |releasever: "String" |Whereever Applicable | Repository Release version
+|sync: "boolean" |Optional(*yes*) | Whether sync the repository
 |===
-    
+
 * Exammple variables
 
 [source=text]
 ----
-satellite_version: 6.4
+satellite_version: 6.7
 org: "gpte"
 org_label: "gpte"
 org_description: "Global Partner Training and Enablement"
 satellite_content:
   - name:             "Ansible server"
-    repos:  
-      - name: 'Red Hat Enterprise Linux 7 Server (RPMs)' 
-        product: 'Red Hat Enterprise Linux Server' 
+    repos:
+      - name: 'Red Hat Enterprise Linux 7 Server (RPMs)'
+        product: 'Red Hat Enterprise Linux Server'
         basearch: 'x86_64'
         releasever:  '7Server'
-       
-      - name: 'Red Hat Satellite Maintenance 6 (for RHEL 7 Server) (RPMs)'
-        product: 'Red Hat Enterprise Linux Server' 
-        basearch: 'x86_64'
-          
+
+      - name: 'Red Hat Enterprise Linux 8 for x86_64 - BaseOS (RPMs)'
+        product: 'Red Hat Enterprise Linux for x86_64'
+        releasever:  '8'
+        sync: no
+
   - name:             "Three Tier App"
-    repos: 
-      - name: 'Red Hat Enterprise Linux 7 Server (RPMs)' 
-        product: 'Red Hat Enterprise Linux Server' 
+    repos:
+      - name: 'Red Hat Enterprise Linux 7 Server (RPMs)'
+        product: 'Red Hat Enterprise Linux Server'
         basearch: 'x86_64'
         releasever:  '7Server'
 ----
@@ -71,17 +72,18 @@ Tags
 
 |===
 |{tag1} |Consistent tag for all satellite config roles
-|{tag2} |This tag is specific to this role only
+|{tag2} |This tag is specific to this role only - repo enablement tasks
+|{tag3} |This tag is specific to this role only - repo sync tasks
 |===
 
 * Example tags
 
 ----
 ## Tagged jobs
-ansible-playbook playbook.yml --tags configure_satellite,configure_satellite_subscription
+ansible-playbook playbook.yml --tags configure_satellite,configure_satellite_reposet,configure_satellite_sync
 
 ## Skip tagged jobs
-ansible-playbook playbook.yml --skip-tags configure_satellite,configure_satellite_subscription
+ansible-playbook playbook.yml --skip-tags configure_satellite,configure_satellite_reposet,configure_satellite_sync
 ----
 
 Example Playbook
@@ -92,26 +94,27 @@ How to use your role (for instance, with variables passed in playbook).
 [source=text]
 ----
 [user@desktop ~]$ cat sample_vars.yml
-satellite_version: 6.4
+satellite_version: 6.7
 org: "gpte"
 org_label: "gpte"
 org_description: "Global Partner Training and Enablement"
 satellite_content:
   - name:             "Ansible server"
-    repos:  
-      - name: 'Red Hat Enterprise Linux 7 Server (RPMs)' 
-        product: 'Red Hat Enterprise Linux Server' 
+    repos:
+      - name: 'Red Hat Enterprise Linux 7 Server (RPMs)'
+        product: 'Red Hat Enterprise Linux Server'
         basearch: 'x86_64'
         releasever:  '7Server'
-       
-      - name: 'Red Hat Satellite Maintenance 6 (for RHEL 7 Server) (RPMs)'
-        product: 'Red Hat Enterprise Linux Server' 
-        basearch: 'x86_64'
-          
+
+      - name: 'Red Hat Enterprise Linux 8 for x86_64 - BaseOS (RPMs)'
+        product: 'Red Hat Enterprise Linux for x86_64'
+        releasever:  '8'
+        sync: no
+
   - name:             "Three Tier App"
-    repos: 
-      - name: 'Red Hat Enterprise Linux 7 Server (RPMs)' 
-        product: 'Red Hat Enterprise Linux Server' 
+    repos:
+      - name: 'Red Hat Enterprise Linux 7 Server (RPMs)'
+        product: 'Red Hat Enterprise Linux Server'
         basearch: 'x86_64'
         releasever:  '7Server'
 
@@ -128,11 +131,9 @@ satellite_content:
 Tips to update Role
 ------------------
 
-To extend role works for other version, create new file named  version_{{satellite_version}}.yml and import newly created file in main.yml
+To extend role works for other version, create new file named  version_{{satellite_version}}.yml if necessary and import newly created file in main.yml
 
-for reference look at link:{main_file}[main.yml] , link:{version_file}[version_6.4.yml] and script 
-
-link:{script_file}[subscription_script_version_6.4.sh]
+for reference look at link:{main_file}[main.yml] and link:{version_file}[version_6.x.yml]
 
 
 Author Information

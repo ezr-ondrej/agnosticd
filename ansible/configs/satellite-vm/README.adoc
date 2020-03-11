@@ -63,12 +63,14 @@ Config Variables
 |life_cycle: "String" |Required |What life cycle env to register to
 |content_view: "String" |Required |Content View name
 |org_label: "String" |Required | Organization label in string without space
+|sync: "boolean" |Optional(*yes*) | Wether to sync the content right away
 |repos: [list of repos]
 !===
 !name: "String" ! Required ! Name
 !product: "String" ! Required ! Product to add repo to
 !basearch: "String" ! Optional ! Architecture to add repo for
 !releasever: "String" ! Optional ! Release version
+!sync: "boolean" |Optional(*yes*) | Sync the content right away
 !===
 |Required | Repositories to enable and add to the content view
 |===
