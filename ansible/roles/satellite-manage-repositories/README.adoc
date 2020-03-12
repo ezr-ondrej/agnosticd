@@ -31,11 +31,12 @@ Role Variables
 |org_description: "String" |Not-required | Organization description
 |satellite_content: {Dictionary} |Required | Main dictionary variable
 |repos: [list] | Required | List of repository name
-|product: "String" |Required | Product name of repository
-|name: "String" |Required | Repository Name
-|basearch: "String" |Wherever Applicable | Repository Base Arch
-|releasever: "String" |Wherever Applicable | Repository Release version
-|sync: "boolean" |Optional(*yes*) | Whether sync the repository
+| product: "String" |Required | Product name of repository
+| name: "String" |Required | Repository Name
+| basearch: "String" |Whereever Applicable | Repository Base Arch
+| releasever: "String" |Whereever Applicable | Repository Release version
+| sync: "boolean" |Optional(*yes*) | Whether sync the repository
+| content_type: "string" |Optional(*yum*) | Content type in the repository
 |===
 
 * Exammple variables

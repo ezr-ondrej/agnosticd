@@ -16,6 +16,24 @@
     - configure_satellite
     - configure_satellite_reposet
 
+- name: "Update repository download_policy"
+  theforeman.foreman.katello_repository:
+    username: "{{ satellite_admin }}"
+    password: "{{ satellite_admin_password }}"
+    server_url: "https://{{ publicname }}"
+    validate_certs: no
+    organization: "{{ org }}"
+    name: "{{ item.1.name | regex_replace('[()]')  + (' ' + item.1.basearch if item.1.basearch|d(None) else '' ) + ( ' ' + item.1.releasever if item.1.releasever|d(None)  else '' ) }}"
+    product: "{{ item.1.product }}"
+    content_type: "{{ item.1.content_type | default('yum') }}"
+    download_policy: "{{ item.1.download_policy }}"
+    state: present
+  loop: "{{ satellite_content | subelements('repos') }}"
+  when: item.1.download_policy is defined
+  tags:
+    - configure_satellite
+    - configure_satellite_reposet
+
 ## Sync repositories
 - name: Sync repository
   theforeman.foreman.katello_sync:
